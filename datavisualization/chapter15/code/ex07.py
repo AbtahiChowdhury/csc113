@@ -1,0 +1,37 @@
+import pygal
+from random import randint
+
+class Die():
+    """A class representing a single die."""
+
+    def __init__(self, numsides=6):
+        """Assume a six-sided die."""
+        self.numsides=numsides
+
+    def roll(self):
+        """"Return a random value between 1 and number of sides."""
+        return randint(1, self.numsides)
+
+
+#Create 2 eight sided die
+die1=Die(8)
+die2=Die(8)
+
+#Make some rolls, and store results in a list
+results=[die1.roll() + die2.roll() for num in range(1000000)]
+
+#Analyze the results
+frequencies=[results.count(value) for value in range(2,die1.numsides+die2.numsides+1)]
+
+#Visualize the results
+hist=pygal.Bar()
+
+#Setting labels of title and axis
+hist.title="Results of rolling two eight sided dice 1000000 times"
+hist.x_labels=[str(x) for x in range(2,die1.numsides+die2.numsides+1)]
+hist.x_title="Result"
+hist.y_title="Frequency of Result"
+
+#Create graph
+hist.add('D8+D8', frequencies)
+hist.render_to_file('ex07.svg')
